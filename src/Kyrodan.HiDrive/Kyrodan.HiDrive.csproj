@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2079D159-D84F-4AAD-A0C1-0E25B9AB915C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Kyrodan.HiDrive</RootNamespace>
+    <AssemblyName>Kyrodan.HiDrive</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Authentication\AuthorizationPermission.cs" />
+    <Compile Include="Authentication\AuthorizationRole.cs" />
+    <Compile Include="Authentication\AuthorizationScope.cs" />
+    <Compile Include="Authentication\HiDriveAuthenticator.cs" />
+    <Compile Include="HiDriveClient.cs" />
+    <Compile Include="IBaseClient.cs" />
+    <Compile Include="Authentication\IHiDriveAuthenticator.cs" />
+    <Compile Include="IHiDriveClient.cs" />
+    <Compile Include="Models\DirectoryBaseItem.cs" />
+    <Compile Include="Authentication\OAuth2Token.cs" />
+    <Compile Include="Models\DirectoryChildItem.cs" />
+    <Compile Include="Models\DirectoryItem.cs" />
+    <Compile Include="Models\FileItem.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserProtocolSet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\BaseRequest.cs" />
+    <Compile Include="Requests\BaseRequestBuilder.cs" />
+    <Compile Include="Requests\DirectoryMember.cs" />
+    <Compile Include="Requests\DirectoryRequestBuilder.cs" />
+    <Compile Include="Requests\FileRequestBuilder.cs" />
+    <Compile Include="Requests\GetRequest.cs" />
+    <Compile Include="Requests\GetStreamRequest.cs" />
+    <Compile Include="Requests\IBaseRequest.cs" />
+    <Compile Include="Requests\IDirectoryRequestBuilder.cs" />
+    <Compile Include="Requests\IFileRequestBuilder.cs" />
+    <Compile Include="Requests\IGetRequest.cs" />
+    <Compile Include="Requests\IGetStreamRequest.cs" />
+    <Compile Include="Requests\IPutRequest.cs" />
+    <Compile Include="Requests\IPutStreamRequest.cs" />
+    <Compile Include="Requests\IUserMeRequestBuilder.cs" />
+    <Compile Include="Requests\IUserRequestBuilder.cs" />
+    <Compile Include="Requests\PutStreamRequest.cs" />
+    <Compile Include="Requests\ServiceError.cs" />
+    <Compile Include="Requests\ServiceException.cs" />
+    <Compile Include="Requests\UserMeRequestBuilder.cs" />
+    <Compile Include="Requests\UserRequestBuilder.cs" />
+    <Compile Include="Serialization\EscapedStringConverter.cs" />
+    <Compile Include="Serialization\TimestampConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
