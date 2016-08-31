@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HiDrive .Net SDK")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Integrates HiDrive into your C# app")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Daniel Bölts")]
 [assembly: AssemblyProduct("Kyrodan.HiDrive")]
