@@ -109,6 +109,9 @@ var file = await client.File
                        .ExecuteAsync(stream);
 ```
 
+## Ressources
+* [NuGet Package Page](https://www.nuget.org/packages/Kyrodan.HiDriveSDK/)
+
 ## License
 
 The source code is licensed under the [MIT license](https://github.com/Kyrodan/hidrive-dotnet-sdk/blob/master/LICENSE).
