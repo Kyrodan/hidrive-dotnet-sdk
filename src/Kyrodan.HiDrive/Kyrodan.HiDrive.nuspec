@@ -8,7 +8,7 @@
     <owners>$author$</owners>
     <licenseUrl>https://github.com/Kyrodan/hidrive-dotnet-sdk/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Kyrodan/hidrive-dotnet-sdk</projectUrl>
-    <iconUrl>https://github.com/Kyrodan/hidrive-dotnet-sdk/blob/master/doc/HiDrive_64x64.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/Kyrodan/hidrive-dotnet-sdk/master/doc/HiDrive_64x64.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes></releaseNotes>
