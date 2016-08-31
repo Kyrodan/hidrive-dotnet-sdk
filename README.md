@@ -62,31 +62,50 @@ The `HiDrive .Net SDK` follows the documented API endpoints - see [API-Refrence]
 
 Get current user data:
 ```csharp
+var fields = new[] { User.Fields.Alias, User.Fields.Account, User.Fields.HomeId, User.Fields.Home };
 var user = await client.User
                        .Me
-                       .Get()
+                       .Get(fields)
                        .ExecuteAsync();
+                       
+var homeId = user.HomeId;
 ```
 
 Get directory:
 ```csharp
+var fields = new[] 
+{ 
+   DirectoryBaseItem.Fields.Path, 
+   DirectoryBaseItem.Fields.Name, 
+   DirectoryBaseItem.Fields.Type, 
+   DirectoryBaseItem.Fields.Members, 
+   DirectoryBaseItem.Fields.Members_Path, 
+   DirectoryBaseItem.Fields.Members_Name, 
+   DirectoryBaseItem.Fields.Members_Id, 
+   DirectoryBaseItem.Fields.Members_Type, 
+   DirectoryBaseItem.Fields.Members_IsReadable, 
+   DirectoryBaseItem.Fields.Members_IsWritable, 
+   DirectoryBaseItem.Fields.Members_ModiefiedDateTime 
+};
+var members = new []{ DirectoryMember.Directory, DirectoryMember.File };
+
 var dir = await client.Directory
-                      .Get("/home/useralias", null, new [] {DirectoryMember.Directory, DirectoryMember.File })
+                      .Get("/some_path_inside_user_home", homeId, members, fields)
                       .ExecuteAsync();
 ```
 
-Download a file
+Download a file:
 ```csharp
 var stream = await client.File
-                         .Download("/home/useralias/myfile.txt")
+                         .Download("/some_path_inside_user_home/myfile.txt", homeId)
                          .ExecuteAsync();
 ```
 
-Upload new file or overwrite if it already exists
+Upload new file or overwrite if it already exists:
 ```csharp
 var stream = File.OpenRead(@"C:\Temp\myfile.txt");
 var file = await client.File
-                       .Upload("myfile.txt", "/home/useralias")
+                       .Upload("myfile.txt", "/some_path_inside_user_home", homeId)
                        .ExecuteAsync(stream);
 ```
 
