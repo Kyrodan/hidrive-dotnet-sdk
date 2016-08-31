@@ -30,22 +30,28 @@ namespace Kyrodan.HiDrive.Authentication
 
         public OAuth2Token Token { get; private set; }
 
-        public Task AuthenticateRequestAsync(HttpRequestMessage request)
+        public async Task AuthenticateRequestAsync(HttpRequestMessage request)
         {
             if (request == null) throw new ArgumentNullException("request");
 
-            // TODO
-            request.Headers.Add("Authorization", (!string.IsNullOrEmpty(Token.TokenType) ? Token.TokenType : "Bearer")  + " " + Token.AccessToken);
+            var token = await GetValidToken();
 
-            return Task.Delay(100);
+            request.Headers.Add("Authorization", (!string.IsNullOrEmpty(token.TokenType) ? token.TokenType : "Bearer")  + " " + token.AccessToken);
         }
 
         public async Task<OAuth2Token> AuthenticateByRefreshTokenAsync(string refreshToken)
         {
             if (string.IsNullOrEmpty(refreshToken)) throw new ArgumentNullException("refreshToken");
 
-            Token = new OAuth2Token { RefreshToken = refreshToken };
-            await GetAccessToken();
+            var parameters = new Dictionary<string, string>
+                {
+                    {"client_id", _clientId},
+                    {"client_secret", _clientSecret},
+                    {"grant_type", "refresh_token"},
+                    {"refresh_token", refreshToken},
+                };
+
+            Token = await RequestTokenAsync(parameters);
 
             return Token;
         }
@@ -54,35 +60,19 @@ namespace Kyrodan.HiDrive.Authentication
         {
             if (string.IsNullOrEmpty(code)) throw new ArgumentNullException("code");
 
-            var httpClient = new HttpClient(_httpClientHandlerFactory());
-            try
+            var parameters = new Dictionary<string, string>
             {
-                var parameters = new Dictionary<string, string>
-                {
-                    {"client_id", _clientId},
-                    {"client_secret", _clientSecret},
-                    {"grant_type", "authorization_code"},
-                    {"code", code},
-                };
+                {"client_id", _clientId},
+                {"client_secret", _clientSecret},
+                {"grant_type", "authorization_code"},
+                {"code", code},
+            };
 
-                var content = new FormUrlEncodedContent(parameters);
-                var response = await httpClient.PostAsync(TokenUrl, content);
+            Token = await RequestTokenAsync(parameters);
 
-                var responseString = await response.Content.ReadAsStringAsync();
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                    throw new InvalidOperationException(responseString);
-
-                Token = JsonConvert.DeserializeObject<OAuth2Token>(responseString);
-
-                return Token;
-
-            }
-            finally
-            {
-                httpClient.Dispose();
-            }
+            return Token;
         }
+
 
         public string GetAuthorizationCodeFromResponseUrl(string url)
         {
@@ -129,29 +119,39 @@ namespace Kyrodan.HiDrive.Authentication
             return uriString;
         }
 
-        private async Task<string> GetAccessToken()
+        private async Task<OAuth2Token> GetValidToken()
         {
-            var client = new HttpClient(_httpClientHandlerFactory());
+            if (Token == null)
+                throw new InvalidOperationException("No token provided. Please authenticate first.");
 
-            var parameters = new Dictionary<string, string>
-                {
-                    {"client_id", _clientId},
-                    {"client_secret", _clientSecret},
-                    {"grant_type", "refresh_token"},
-                    {"refresh_token", Token.RefreshToken},
-                };
+            if (Token.IsValid)
+                return Token;
 
-            var content = new FormUrlEncodedContent(parameters);
+            var token = await AuthenticateByRefreshTokenAsync(Token.RefreshToken);
 
-            var response = await client.PostAsync(TokenUrl, content);
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new InvalidOperationException(responseString);
-
-            Token = JsonConvert.DeserializeObject<OAuth2Token>(responseString);
-            return Token.AccessToken;
+            return token;
         }
 
+        private async Task<OAuth2Token> RequestTokenAsync(IDictionary<string, string> parameters)
+        {
+            using (var httpClient = new HttpClient(_httpClientHandlerFactory()))
+            {
+                var content = new FormUrlEncodedContent(parameters);
+                var response = await httpClient.PostAsync(TokenUrl, content);
+
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    throw new InvalidOperationException(responseString);
+
+                var token = JsonConvert.DeserializeObject<OAuth2Token>(responseString);
+
+                if (!token.IsValid)
+                    throw new InvalidOperationException("Could not retrieve new access token.");
+
+
+                return token;
+            }
+        }
     }
 }
