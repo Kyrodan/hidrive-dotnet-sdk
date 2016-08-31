@@ -1,5 +1,5 @@
 # HiDrive .Net SDK
-
+[![NuGet](https://img.shields.io/nuget/v/Kyrodan.HiDriveSDK.svg?maxAge=2592000)](https://www.nuget.org/packages/Kyrodan.HiDriveSDK/)
 
 ## Introduction
 
