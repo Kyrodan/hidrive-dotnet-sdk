@@ -22,7 +22,7 @@ if %errorlevel% NEQ 0 goto error
 xcopy src\Kyrodan.HiDrive\bin\Release\*.* build\bin
 rem del build\bin\*.pdb build\bin\*.xml 
 %zip% a -tzip build\dist\Kyrodan.HiDriveSDK.zip .\build\bin\*
-%nuget% pack src\Kyrodan.HiDrive\Kyrodan.HiDrive.csproj -OutputDirectory build\dist
+%nuget% pack src\Kyrodan.HiDrive\Kyrodan.HiDrive.csproj -Properties "Configuration=Release;Platform=AnyCPU" -OutputDirectory build\dist
 
 
 
