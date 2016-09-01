@@ -1,20 +1,22 @@
-version: 0.2.0.{build}
+version: ${SEMVER}.{build}
 configuration: Release
 init:
 - cmd: if "%APPVEYOR_REPO_TAG%" NEQ "true" set BUILD_QUALITY=-unstable
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}$(BUILD_QUALITY)'
+  assembly_version: $(SEMVER)
+  assembly_file_version: $(SEMVER).{build}
+  assembly_informational_version: $(SEMVER)$(BUILD_QUALITY)
+environment:
+  SEMVER: 0.2.0
 install:
 - cmd: tools\nuget.exe restore
 build:
   publish_nuget: true
   verbosity: minimal
 after_build:
-- cmd: tools\7za.exe a -tzip Kyrodan.HiDriveSDK.%APPVEYOR_BUILD_VERSION%%BUILD_QUALITY%.zip .\src\Kyrodan.HiDrive\bin\%configuration%\*.*
+- cmd: tools\7za.exe a -tzip Kyrodan.HiDriveSDK.%SEMVER%%BUILD_QUALITY%.zip .\src\Kyrodan.HiDrive\bin\%configuration%\*.*
 artifacts:
 - path: Kyrodan.HiDriveSDK.*.zip
   name: ZIP-Distribution
@@ -29,7 +31,7 @@ deploy:
 - provider: GitHub
   auth_token:
     secure: zqGFJdh0d0e+S2Eyudc4gCjQqImkQutu/TsN9knDXJCXMaVl8izm9vnMK9ayX7VP
-  artifact: Kyrodan.HiDriveSDK.%APPVEYOR_BUILD_VERSION%.zip
+  artifact: Kyrodan.HiDriveSDK.*.zip
   draft: true
   prerelease: false
   on:
