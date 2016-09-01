@@ -1,4 +1,5 @@
 # HiDrive .Net SDK
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Kyrodan/hidrive-dotnet-sdk/master/LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/Kyrodan.HiDriveSDK.svg?maxAge=2592000)](https://www.nuget.org/packages/Kyrodan.HiDriveSDK/)
 
 ## Introduction
