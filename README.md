@@ -111,7 +111,10 @@ var file = await client.File
 ```
 
 ## Ressources
-* [NuGet Package Page](https://www.nuget.org/packages/Kyrodan.HiDriveSDK/)
+* [Changelog](CHANGELOG.md)
+* [NuGet Package](https://www.nuget.org/packages/Kyrodan.HiDriveSDK/)
+* [HiDrive Developer Documentation](https://dev.strato.com/hidrive/)
+
 
 ## License
 
