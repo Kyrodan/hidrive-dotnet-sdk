@@ -1,4 +1,4 @@
-version: ${SEMVER}.{build}
+version: 0.2.0.{build}
 configuration: Release
 init:
 - cmd: if "%APPVEYOR_REPO_TAG%" NEQ "true" set BUILD_QUALITY=-unstable
