@@ -1,7 +1,10 @@
 version: 0.2.0.{build}
 configuration: Release
 init:
-- cmd: if "%APPVEYOR_REPO_TAG%" NEQ "true" set BUILD_QUALITY=-beta
+- cmd: 
+if "%APPVEYOR_REPO_TAG%" NEQ "true" set BUILD_QUALITY=-beta
+copy src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs
+
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
@@ -10,6 +13,12 @@ assembly_info:
   assembly_informational_version: $(SEMVER)$(BUILD_QUALITY)
 environment:
   SEMVER: 0.2.0
+  CLIENT_ID: 
+	secure:
+  CLIENT_SECRET:
+    secure:
+  CLIENT_REFRESHTOKEN:
+	secure:
 install:
 - cmd: tools\nuget.exe restore
 build:

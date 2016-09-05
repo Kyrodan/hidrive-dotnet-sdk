@@ -2,6 +2,8 @@
 
 ### New
 
+* Implemented Unit Tests
+
 ### Fixed
 
 

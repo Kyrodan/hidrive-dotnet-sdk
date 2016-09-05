@@ -24,7 +24,7 @@ namespace Kyrodan.HiDrive.Models
         public string Account { get; set; }
 
         [DataMember(Name = "encrypted")]
-        public bool? IsEncrypted { get; set; }
+        public bool? Encrypted { get; set; }
 
         [DataMember(Name = "descr")]
         public string Description { get; set; }
