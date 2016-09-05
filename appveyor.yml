@@ -13,12 +13,6 @@ assembly_info:
   assembly_informational_version: $(SEMVER)$(BUILD_QUALITY)
 environment:
   SEMVER: 0.2.0
-  CLIENT_ID: 
-	secure:
-  CLIENT_SECRET:
-    secure:
-  CLIENT_REFRESHTOKEN:
-	secure:
 install:
 - cmd: tools\nuget.exe restore
 build:
