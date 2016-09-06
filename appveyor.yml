@@ -19,7 +19,7 @@ environment:
 install:
 - cmd: tools\nuget.exe restore
 before_build:
-- ps: >-
+- ps: |
       #copy src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs
 	  $original_file = 'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl'
       $destination_file =  'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs'
