@@ -50,7 +50,7 @@ namespace Kyrodan.HiDrive.Authentication
                     throw new NotImplementedException();
             }
 
-            return string.Format("{0},{1}", roleString, permissionString);
+            return $"{roleString},{permissionString}";
         }
     }
 }

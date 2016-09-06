@@ -52,13 +52,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AssemblySetup.cs" />
-    <Compile Include="BaseTest.cs" />
+    <Compile Include="Authentication\AuthenticatorTests.cs" />
+    <Compile Include="Authentication\AuthorizationScopeTests.cs" />
+    <Compile Include="Requests\BaseRequestTest.cs" />
     <Compile Include="ClientConfiguration.cs" />
-    <Compile Include="DirectoryTests.cs" />
-    <Compile Include="FileTests.cs" />
+    <Compile Include="Requests\DirectoryRequestTests.cs" />
+    <Compile Include="Requests\FileRequestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserTests.cs" />
+    <Compile Include="Requests\UserRequestTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kyrodan.HiDrive\Kyrodan.HiDrive.csproj">
@@ -69,6 +70,7 @@
   <ItemGroup>
     <None Include="ClientConfiguration.cs.tmpl" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

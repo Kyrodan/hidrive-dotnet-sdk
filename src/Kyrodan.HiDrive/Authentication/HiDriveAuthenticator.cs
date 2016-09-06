@@ -122,7 +122,11 @@ namespace Kyrodan.HiDrive.Authentication
         private async Task<OAuth2Token> GetValidToken()
         {
             if (Token == null)
-                throw new InvalidOperationException("No token provided. Please authenticate first.");
+                throw new AuthenticationException(new AuthenticationError
+                {
+                    Error = "no_token",
+                    Description = "No token provided. Please authenticate first."
+                });
 
             if (Token.IsValid)
                 return Token;
@@ -142,12 +146,16 @@ namespace Kyrodan.HiDrive.Authentication
                 var responseString = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
-                    throw new InvalidOperationException(responseString);
+                    throw new AuthenticationException(JsonConvert.DeserializeObject<AuthenticationError>(responseString));
 
                 var token = JsonConvert.DeserializeObject<OAuth2Token>(responseString);
 
                 if (!token.IsValid)
-                    throw new InvalidOperationException("Could not retrieve new access token.");
+                    throw new AuthenticationException(new AuthenticationError
+                    {
+                        Error = "token_invalid",
+                        Description = "Could not retrieve new access token."
+                    });
 
 
                 return token;

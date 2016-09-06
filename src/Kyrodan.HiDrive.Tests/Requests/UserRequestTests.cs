@@ -2,15 +2,17 @@
 using Kyrodan.HiDrive.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Kyrodan.HiDrive.Tests
+namespace Kyrodan.HiDrive.Tests.Requests
 {
     [TestClass]
-    public class UserTests : BaseTest
+    public class UserRequestTests : BaseRequestTest
     {
         [TestMethod]
         public async Task GetMe()
         {
-            var result = await Client.User.Me.Get().ExecuteAsync();
+            var sut = Client.User.Me.Get();
+
+            var result = await sut.ExecuteAsync();
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Account);
@@ -34,7 +36,9 @@ namespace Kyrodan.HiDrive.Tests
                 User.Fields.Protocols,
             };
 
-            var result = await Client.User.Me.Get(fields).ExecuteAsync();
+            var sut = Client.User.Me.Get(fields);
+
+            var result = await sut.ExecuteAsync();
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Account);

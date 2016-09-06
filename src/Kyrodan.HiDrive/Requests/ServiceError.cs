@@ -13,7 +13,7 @@ namespace Kyrodan.HiDrive.Requests
 
         public override string ToString()
         {
-            return string.Format("Code: {0}\r\nMessage: {1}", Code, Message);
+            return $"Code: {Code}\r\nMessage: {Message}";
         }
     }
 }
