@@ -21,13 +21,13 @@ install:
 before_build:
 - ps: |
       #copy src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs
-	  $original_file = 'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl'
+      $original_file = 'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl'
       $destination_file =  'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs'
       (Get-Content $original_file) | Foreach-Object {
-          $_ -replace '{{ClientId}}', '$env:HIDRIVE_CLIENTID' `
-             -replace '{{ClientSecret}}', '$env:HIDRIVE_CLIENTSECRET' `
-             -replace '{{RefreshToken}}', '$env:HIDRIVE_REFRESHTOKEN' 
-          } | Set-Content $destination_file
+        $_ -replace '{{ClientId}}', '$env:HIDRIVE_CLIENTID' `
+           -replace '{{ClientSecret}}', '$env:HIDRIVE_CLIENTSECRET' `
+           -replace '{{RefreshToken}}', '$env:HIDRIVE_REFRESHTOKEN' 
+      } | Set-Content $destination_file
 build:
   publish_nuget: true
   verbosity: minimal
