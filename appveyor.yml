@@ -10,10 +10,24 @@ assembly_info:
   assembly_informational_version: $(SEMVER)$(BUILD_QUALITY)
 environment:
   SEMVER: 0.2.0
+  HIDRIVE_CLIENTID:
+    secure: b7+g2EXdhujw/wEzs0mUgZyXEM5iFmulfbcFQxORWmprggQWe1MKwkZjCw3MLlRE
+  HIDRIVE_CLIENTSECRET:
+    secure: 3udqP0meKf9lw+EhwB/mvVfG2tXBvsS3SwWpQfs7RsPNs4FZy3iHLwwH7v5L25IH
+  HIDRIVE_REFRESHTOKEN:
+    secure: 2aAKUSlZnV6PubvLx1HU1PMPS4YMcaYeHDwszCDCBEw=
 install:
 - cmd: tools\nuget.exe restore
 before_build:
-- cmd: copy src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs
+- ps: >-
+      #copy src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs
+	  $original_file = 'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl'
+      $destination_file =  'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs'
+      (Get-Content $original_file) | Foreach-Object {
+          $_ -replace '{{ClientId}}', '$env:HIDRIVE_CLIENTID' `
+             -replace '{{ClientSecret}}', '$env:HIDRIVE_CLIENTSECRET' `
+             -replace '{{RefreshToken}}', '$env:HIDRIVE_REFRESHTOKEN' 
+          } | Set-Content $destination_file
 build:
   publish_nuget: true
   verbosity: minimal
