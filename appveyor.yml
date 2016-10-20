@@ -4,7 +4,7 @@ init:
 - cmd: if "%APPVEYOR_REPO_TAG%" NEQ "true" set BUILD_QUALITY=-unstable
 assembly_info:
   patch: true
-  file: '**\AssemblyInfo.*'
+  file: 'src\SharedAssemblyInfo.cs'
   assembly_version: $(SEMVER)
   assembly_file_version: $(SEMVER).{build}
   assembly_informational_version: $(SEMVER)$(BUILD_QUALITY)

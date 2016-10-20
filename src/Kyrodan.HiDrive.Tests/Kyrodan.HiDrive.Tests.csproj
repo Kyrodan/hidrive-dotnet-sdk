@@ -52,6 +52,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Authentication\AuthenticatorTests.cs" />
     <Compile Include="Authentication\AuthorizationScopeTests.cs" />
     <Compile Include="Requests\BaseRequestTest.cs" />

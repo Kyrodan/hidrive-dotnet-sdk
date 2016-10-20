@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Authentication\AuthenticationError.cs" />
     <Compile Include="Authentication\AuthenticationException.cs" />
     <Compile Include="Authentication\AuthorizationPermission.cs" />
