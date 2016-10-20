@@ -1,4 +1,4 @@
-version: 0.2.0.{build}
+version: 0.3.0.{build}
 configuration: Release
 init:
 - cmd: if "%APPVEYOR_REPO_TAG%" NEQ "true" set BUILD_QUALITY=-unstable
@@ -9,7 +9,7 @@ assembly_info:
   assembly_file_version: $(SEMVER).{build}
   assembly_informational_version: $(SEMVER)$(BUILD_QUALITY)
 environment:
-  SEMVER: 0.2.0
+  SEMVER: 0.3.0
   HIDRIVE_CLIENTID:
     secure: b7+g2EXdhujw/wEzs0mUgZyXEM5iFmulfbcFQxORWmprggQWe1MKwkZjCw3MLlRE
   HIDRIVE_CLIENTSECRET:
