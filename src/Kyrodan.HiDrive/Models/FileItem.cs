@@ -13,8 +13,8 @@ namespace Kyrodan.HiDrive.Models
         [JsonConverter(typeof(TimestampConverter))]
         public DateTime? CreatedDateTime { get; set; }
 
-        [DataMember(Name = "has_dirs")]
-        public bool? HasDirectories { get; set; }
+        //[DataMember(Name = "has_dirs")]
+        //public bool? HasDirectories { get; set; }
 
         [DataMember(Name = "id")]
         public string Id { get; set; }

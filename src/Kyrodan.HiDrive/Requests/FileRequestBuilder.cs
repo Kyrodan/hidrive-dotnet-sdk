@@ -57,5 +57,52 @@ namespace Kyrodan.HiDrive.Requests
 
             return request;
         }
+
+        public IRequest<FileItem> Copy(string sourcePath = null, string sourceId = null, string destPath = null, string destId = null,
+            string snapshot = null)
+        {
+            var request = new Request<FileItem>(this.AppendSegmentToRequestUrl("copy"), this.Client)
+            {
+                Method = "POST"
+            };
+
+            if (sourcePath != null) request.QueryOptions.Add(new KeyValuePair<string, string>("src", Uri.EscapeDataString(sourcePath)));
+            if (sourceId != null) request.QueryOptions.Add(new KeyValuePair<string, string>("src_id", sourceId));
+            if (destPath != null) request.QueryOptions.Add(new KeyValuePair<string, string>("dst", Uri.EscapeDataString(destPath)));
+            if (destId != null) request.QueryOptions.Add(new KeyValuePair<string, string>("dst_id", destId));
+            if (snapshot != null) request.QueryOptions.Add(new KeyValuePair<string, string>("snapshot", snapshot));
+
+            return request;
+        }
+
+        public IRequest<FileItem> Rename(string path = null, string pid = null, string name = null)
+        {
+            var request = new Request<FileItem>(this.AppendSegmentToRequestUrl("rename"), this.Client)
+            {
+                Method = "POST"
+            };
+
+            if (path != null) request.QueryOptions.Add(new KeyValuePair<string, string>("path", Uri.EscapeDataString(path)));
+            if (pid != null) request.QueryOptions.Add(new KeyValuePair<string, string>("pid", pid));
+            if (name != null) request.QueryOptions.Add(new KeyValuePair<string, string>("name", Uri.EscapeDataString(name)));
+
+            return request;
+        }
+
+        public IRequest<FileItem> Move(string sourcePath = null, string sourceId = null, string destPath = null, string destId = null)
+        {
+            var request = new Request<FileItem>(this.AppendSegmentToRequestUrl("move"), this.Client)
+            {
+                Method = "POST"
+            };
+
+            if (sourcePath != null) request.QueryOptions.Add(new KeyValuePair<string, string>("src", Uri.EscapeDataString(sourcePath)));
+            if (sourceId != null) request.QueryOptions.Add(new KeyValuePair<string, string>("src_id", sourceId));
+            if (destPath != null) request.QueryOptions.Add(new KeyValuePair<string, string>("dst", Uri.EscapeDataString(destPath)));
+            if (destId != null) request.QueryOptions.Add(new KeyValuePair<string, string>("dst_id", destId));
+
+            return request;
+
+        }
     }
 }

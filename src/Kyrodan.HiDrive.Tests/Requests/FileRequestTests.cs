@@ -24,7 +24,7 @@ namespace Kyrodan.HiDrive.Tests.Requests
         }
 
         [ClassCleanup]
-        public static async void ClassCleanup()
+        public static void ClassCleanup()
         {
             var client = CreateClient();
             client.Directory.Delete(TestFolder, HomeId, true).ExecuteAsync().Wait();
@@ -43,9 +43,8 @@ namespace Kyrodan.HiDrive.Tests.Requests
             var filename = "download_test-" + Random.Next() + ".bin";
             var uploadedFile = await Client.File.Upload(filename, TestFolder, HomeId).ExecuteAsync(stream);
 
-            var sut = Client.File.Download(TestFolder + "/" + filename, HomeId);
-
             // Act
+            var sut = Client.File.Download(TestFolder + "/" + filename, HomeId);
             var result = await sut.ExecuteAsync();
 
             // Assert
@@ -65,14 +64,25 @@ namespace Kyrodan.HiDrive.Tests.Requests
             var stream = new MemoryStream(content);
 
             var filename = "upload_test-" + Random.Next() + ".bin";
-            var sut = Client.File.Upload(filename, TestFolder, HomeId);
 
             // Act
+            var sut = Client.File.Upload(filename, TestFolder, HomeId);
             var result = await sut.ExecuteAsync(stream);
 
             // Assert
+            Assert.IsNotNull(result);
             Assert.AreEqual(filename, result.Name);
             Assert.AreEqual(content.LongLength, result.Size);
+            Assert.IsNotNull(result.Id);
+            Assert.IsNotNull(result.Path);
+            Assert.IsNotNull(result.CreatedDateTime);
+            Assert.IsNotNull(result.MimeType);
+            Assert.IsNotNull(result.ModifiedDateTime);
+            Assert.IsNotNull(result.ParentId);
+            Assert.IsNotNull(result.IsReadable);
+            Assert.IsNotNull(result.Type);
+            Assert.IsNotNull(result.IsWritable);
+
         }
 
         [TestMethod]
@@ -85,17 +95,26 @@ namespace Kyrodan.HiDrive.Tests.Requests
             var filename = "upload_test-" + Random.Next() + ".bin";
             var existingFile = await Client.File.Upload(filename, TestFolder, HomeId).ExecuteAsync(initialStream);
 
-            var content = CreateRandomBytes();
+            var content = CreateRandomBytes(4096);
             var stream = new MemoryStream(content);
-            var sut = Client.File.Upload(filename, TestFolder, HomeId, UploadMode.CreateOrUpdate);
 
             // Act
+            var sut = Client.File.Upload(filename, TestFolder, HomeId, UploadMode.CreateOrUpdate);
             var result = await sut.ExecuteAsync(stream);
 
             // Assert
-            Assert.AreEqual(filename, result.Name);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(existingFile.Name, result.Name);
             Assert.AreEqual(content.LongLength, result.Size);
             Assert.AreEqual(existingFile.Id, result.Id);
+            Assert.AreEqual(existingFile.Path, result.Path);
+            Assert.AreEqual(existingFile.CreatedDateTime, result.CreatedDateTime);
+            Assert.IsNotNull(result.MimeType);
+            Assert.IsNotNull(result.ModifiedDateTime);
+            Assert.AreEqual(existingFile.ParentId, result.ParentId);
+            Assert.AreEqual(existingFile.IsReadable, result.IsReadable);
+            Assert.AreEqual(existingFile.Type, result.Type);
+            Assert.AreEqual(existingFile.IsWritable, result.IsWritable);
         }
 
         [TestMethod]
@@ -110,9 +129,9 @@ namespace Kyrodan.HiDrive.Tests.Requests
 
             var content = CreateRandomBytes();
             var stream = new MemoryStream(content);
-            var sut = Client.File.Upload(filename, TestFolder, HomeId);
 
             // Act
+            var sut = Client.File.Upload(filename, TestFolder, HomeId);
             try
             {
                 var result = await sut.ExecuteAsync(stream);
@@ -130,9 +149,36 @@ namespace Kyrodan.HiDrive.Tests.Requests
         }
 
         [TestMethod]
-        [Ignore]
         public async Task Copy()
         {
+            // Arrange
+            var content = CreateRandomBytes();
+            var stream = new MemoryStream(content);
+
+            var sourceFilename = "copy_test-source-" + Random.Next() + ".bin";
+            var sourcePath = TestFolder + "/" + sourceFilename;
+            var source = await Client.File.Upload(sourceFilename, TestFolder, HomeId).ExecuteAsync(stream);
+
+            var destFilename = "copy_test-dest-" + Random.Next() + ".bin";
+            var destPath = TestFolder + "/" + destFilename;
+
+            // Act
+            var sut = Client.File.Copy(sourcePath, HomeId, destPath, HomeId);
+            var result = await sut.ExecuteAsync();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Id);
+            Assert.IsNotNull(result.Path);
+            Assert.IsNotNull(result.CreatedDateTime);
+            Assert.IsNotNull(result.MimeType);
+            Assert.IsNotNull(result.ModifiedDateTime);
+            Assert.AreEqual(destFilename, result.Name);
+            Assert.IsNotNull(result.ParentId);
+            Assert.IsNotNull(result.IsReadable);
+            Assert.AreEqual(content.LongLength, result.Size);
+            Assert.IsNotNull(result.Type);
+            Assert.IsNotNull(result.IsWritable);
         }
 
         [TestMethod]
@@ -146,9 +192,9 @@ namespace Kyrodan.HiDrive.Tests.Requests
             var stream = new MemoryStream(content);
             var file = await Client.File.Upload(filename, TestFolder, HomeId).ExecuteAsync(stream);
 
-            var sut = Client.File.Delete(TestFolder + "/" + filename, HomeId);
 
             // Act
+            var sut = Client.File.Delete(TestFolder + "/" + filename, HomeId);
             await sut.ExecuteAsync();
 
             // Assert
@@ -156,15 +202,68 @@ namespace Kyrodan.HiDrive.Tests.Requests
         }
 
         [TestMethod]
-        [Ignore]
         public async Task Rename()
         {
+            // Arrange
+            var content = CreateRandomBytes();
+            var stream = new MemoryStream(content);
+
+            var sourceFilename = "rename_test-source-" + Random.Next() + ".bin";
+            var sourcePath = TestFolder + "/" + sourceFilename;
+            var source = await Client.File.Upload(sourceFilename, TestFolder, HomeId).ExecuteAsync(stream);
+
+            var destFilename = "rename_test-dest-" + Random.Next() + ".bin";
+
+            // Act
+            var sut = Client.File.Rename(sourcePath, HomeId, destFilename);
+            var result = await sut.ExecuteAsync();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(destFilename, result.Name);
+            Assert.AreEqual(source.Size, result.Size);
+            Assert.AreEqual(source.Id, result.Id);
+            Assert.IsNotNull(result.Path);
+            Assert.AreEqual(source.CreatedDateTime, result.CreatedDateTime);
+            Assert.AreEqual(source.MimeType, result.MimeType);
+            Assert.AreEqual(source.ModifiedDateTime, result.ModifiedDateTime);
+            Assert.AreEqual(source.ParentId, result.ParentId);
+            Assert.AreEqual(source.IsReadable, result.IsReadable);
+            Assert.AreEqual(source.Type, result.Type);
+            Assert.AreEqual(source.IsWritable, result.IsWritable);
         }
 
         [TestMethod]
-        [Ignore]
         public async Task Move()
         {
+            // Arrange
+            var content = CreateRandomBytes();
+            var stream = new MemoryStream(content);
+
+            var sourceFilename = "move_test-source-" + Random.Next() + ".bin";
+            var sourcePath = TestFolder + "/" + sourceFilename;
+            var source = await Client.File.Upload(sourceFilename, TestFolder, HomeId).ExecuteAsync(stream);
+
+            var destFilename = "move_test-dest-" + Random.Next() + ".bin";
+            var destPath = TestFolder + "/" + destFilename;
+
+            // Act
+            var sut = Client.File.Move(sourcePath, HomeId, destPath, HomeId);
+            var result = await sut.ExecuteAsync();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(destFilename, result.Name);
+            Assert.AreEqual(source.Size, result.Size);
+            Assert.AreEqual(source.Id, result.Id);
+            Assert.IsNotNull(result.Path);
+            Assert.AreEqual(source.CreatedDateTime, result.CreatedDateTime);
+            Assert.AreEqual(source.MimeType, result.MimeType);
+            Assert.AreEqual(source.ModifiedDateTime, result.ModifiedDateTime);
+            Assert.AreEqual(source.ParentId, result.ParentId);
+            Assert.AreEqual(source.IsReadable, result.IsReadable);
+            Assert.AreEqual(source.Type, result.Type);
+            Assert.AreEqual(source.IsWritable, result.IsWritable);
         }
 
     }

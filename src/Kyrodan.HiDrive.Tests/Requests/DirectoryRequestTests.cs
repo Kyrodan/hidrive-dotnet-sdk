@@ -288,10 +288,10 @@ namespace Kyrodan.HiDrive.Tests.Requests
         public async Task Rename()
         {
             // Arrange
-            var sourcePath = TestFolder + "/move_test-source-" + Random.Next();
+            var sourcePath = TestFolder + "/rename_test-source-" + Random.Next();
             var source = await Client.Directory.Create(sourcePath, HomeId).ExecuteAsync();
 
-            var destName = "move_test-dest-" + Random.Next();
+            var destName = "rename_test-dest-" + Random.Next();
 
             // Act
             var sut = Client.Directory.Rename(sourcePath, HomeId, destName);
