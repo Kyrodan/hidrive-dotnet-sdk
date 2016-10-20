@@ -57,23 +57,23 @@
     <Compile Include="Requests\DirectoryMember.cs" />
     <Compile Include="Requests\DirectoryRequestBuilder.cs" />
     <Compile Include="Requests\FileRequestBuilder.cs" />
-    <Compile Include="Requests\GetRequest.cs" />
-    <Compile Include="Requests\GetStreamRequest.cs" />
+    <Compile Include="Requests\Request.cs" />
+    <Compile Include="Requests\ReceiveStreamRequest.cs" />
     <Compile Include="Requests\IBaseRequest.cs" />
     <Compile Include="Requests\IDirectoryRequestBuilder.cs" />
     <Compile Include="Requests\IFileRequestBuilder.cs" />
-    <Compile Include="Requests\IGetRequest.cs" />
-    <Compile Include="Requests\IGetStreamRequest.cs" />
-    <Compile Include="Requests\IPutRequest.cs" />
-    <Compile Include="Requests\IPutStreamRequest.cs" />
+    <Compile Include="Requests\IReceiveStreamRequest.cs" />
+    <Compile Include="Requests\ISendStreamRequest.cs" />
+    <Compile Include="Requests\IRequest.cs" />
     <Compile Include="Requests\IUserMeRequestBuilder.cs" />
     <Compile Include="Requests\IUserRequestBuilder.cs" />
-    <Compile Include="Requests\PutStreamRequest.cs" />
+    <Compile Include="Requests\SendStreamRequest.cs" />
     <Compile Include="Requests\ServiceError.cs" />
     <Compile Include="Requests\ServiceException.cs" />
     <Compile Include="Requests\UserMeRequestBuilder.cs" />
     <Compile Include="Requests\UserRequestBuilder.cs" />
     <Compile Include="Serialization\EscapedStringConverter.cs" />
+    <Compile Include="Serialization\JsonExtensions.cs" />
     <Compile Include="Serialization\TimestampConverter.cs" />
   </ItemGroup>
   <ItemGroup>

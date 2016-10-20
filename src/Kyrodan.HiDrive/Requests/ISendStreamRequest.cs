@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Kyrodan.HiDrive.Requests
 {
-    public interface IPutStreamRequest<T>
+    public interface ISendStreamRequest<T>
     {
         Task<T> ExecuteAsync(Stream content);
         Task<T> ExecuteAsync(Stream content, CancellationToken cancellationToken);

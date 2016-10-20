@@ -5,7 +5,7 @@ namespace Kyrodan.HiDrive.Requests
 {
     public interface IUserMeRequestBuilder
     {
-        IGetRequest<User> Get(IEnumerable<string> fields = null);
+        IRequest<User> Get(IEnumerable<string> fields = null);
     }
 
 }

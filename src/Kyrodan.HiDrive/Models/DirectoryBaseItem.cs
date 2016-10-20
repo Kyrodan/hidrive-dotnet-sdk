@@ -96,7 +96,7 @@ namespace Kyrodan.HiDrive.Models
         public bool? IsReadable { get; set; }
 
         [DataMember(Name = "size")]
-        public long Size { get; set; }
+        public long? Size { get; set; }
 
         [DataMember(Name = "writable")]
         public bool? IsWritable { get; set; }

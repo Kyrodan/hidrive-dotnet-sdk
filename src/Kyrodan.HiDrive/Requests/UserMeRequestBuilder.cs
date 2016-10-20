@@ -10,9 +10,9 @@ namespace Kyrodan.HiDrive.Requests
         {
         }
 
-        public IGetRequest<User> Get(IEnumerable<string> fields = null)
+        public IRequest<User> Get(IEnumerable<string> fields = null)
         {
-            var request = new GetRequest<User>(this.RequestUrl, this.Client);
+            var request = new Request<User>(this.RequestUrl, this.Client);
 
             if (fields != null)
                 request.QueryOptions.Add(new KeyValuePair<string, string>("fields", string.Join(",", fields)));

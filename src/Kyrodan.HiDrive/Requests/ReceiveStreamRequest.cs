@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Kyrodan.HiDrive.Requests
 {
-    public class GetStreamRequest : BaseRequest, IGetStreamRequest
+    public class ReceiveStreamRequest : BaseRequest, IReceiveStreamRequest
     {
-        public GetStreamRequest(string requestUrl, IBaseClient client)
+        public ReceiveStreamRequest(string requestUrl, IBaseClient client)
             : base(requestUrl, client)
         {
         }
@@ -18,7 +18,6 @@ namespace Kyrodan.HiDrive.Requests
 
         public async Task<Stream> ExecuteAsync(CancellationToken cancellationToken)
         {
-            this.Method = "GET";
             var retrievedStream = await this.SendStreamAsync(null, cancellationToken).ConfigureAwait(false);
             return retrievedStream;
         }

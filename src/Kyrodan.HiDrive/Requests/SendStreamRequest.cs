@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 
 namespace Kyrodan.HiDrive.Requests
 {
-    internal class PutStreamRequest<T> : BaseRequest, IPutStreamRequest<T>
+    internal class SendStreamRequest<T> : BaseRequest, ISendStreamRequest<T>
     {
-        public PutStreamRequest(string requestUrl, IBaseClient client)
+        public SendStreamRequest(string requestUrl, IBaseClient client)
             : base(requestUrl, client)
         {
+            this.Method = "POST";
         }
 
         public async Task<T> ExecuteAsync(Stream content)
@@ -18,7 +19,6 @@ namespace Kyrodan.HiDrive.Requests
 
         public async Task<T> ExecuteAsync(Stream content, CancellationToken cancellationToken)
         {
-            this.Method = "PUT";
             var retrievedEntity = await this.SendAsync<T>(content, cancellationToken).ConfigureAwait(false);
             return retrievedEntity;
         }

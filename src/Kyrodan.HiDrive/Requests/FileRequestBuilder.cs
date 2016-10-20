@@ -11,9 +11,9 @@ namespace Kyrodan.HiDrive.Requests
         {
         }
 
-        public IGetStreamRequest Download(string path = null, string pid = null, string snapshot = null)
+        public IReceiveStreamRequest Download(string path = null, string pid = null, string snapshot = null)
         {
-            var request = new GetStreamRequest(this.RequestUrl, this.Client);
+            var request = new ReceiveStreamRequest(this.RequestUrl, this.Client);
 
             if (path != null) request.QueryOptions.Add(new KeyValuePair<string, string>("path", Uri.EscapeDataString(path)));
             if (pid != null) request.QueryOptions.Add(new KeyValuePair<string, string>("pid", pid));
@@ -22,9 +22,12 @@ namespace Kyrodan.HiDrive.Requests
             return request;
         }
 
-        public IPutStreamRequest<FileItem> Upload(string name, string dir = null, string dir_id = null)
+        public ISendStreamRequest<FileItem> Upload(string name, string dir = null, string dir_id = null)
         {
-            var request = new PutStreamRequest<FileItem>(this.RequestUrl, this.Client);
+            var request = new SendStreamRequest<FileItem>(this.RequestUrl, this.Client)
+            {
+                Method = "PUT"
+            };
 
             request.QueryOptions.Add(new KeyValuePair<string, string>("name", Uri.EscapeDataString(name)));
             if (dir != null) request.QueryOptions.Add(new KeyValuePair<string, string>("dir", Uri.EscapeDataString(dir)));

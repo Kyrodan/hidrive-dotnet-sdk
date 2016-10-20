@@ -59,6 +59,7 @@
     <Compile Include="Requests\DirectoryRequestTests.cs" />
     <Compile Include="Requests\FileRequestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\HiDriveClientExtensions.cs" />
     <Compile Include="Requests\UserRequestTests.cs" />
   </ItemGroup>
   <ItemGroup>

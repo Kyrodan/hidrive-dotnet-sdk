@@ -63,11 +63,22 @@ namespace Kyrodan.HiDrive.Requests
         public async Task SendAsync(object serializableObject, CancellationToken cancellationToken,
             HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
         {
-            using (
-                await
-                    this.SendRequestAsync(serializableObject, cancellationToken, completionOption).ConfigureAwait(false)
+            using (var response = 
+                    await this.SendRequestAsync(serializableObject, cancellationToken, completionOption).ConfigureAwait(false)
                 )
             {
+                if (response.IsSuccessStatusCode)
+                    return;
+
+                string responseString = null;
+                if (response.Content != null)
+                {
+                    responseString = await response.Content.ReadAsStringAsync();
+                }
+
+                var error = responseString != null ? JsonConvert.DeserializeObject<ServiceError>(responseString) : new ServiceError() { Code = "unknown" };
+                throw new ServiceException(error);
+
             }
         }
 
@@ -87,7 +98,7 @@ namespace Kyrodan.HiDrive.Requests
                     responseString = await response.Content.ReadAsStringAsync();
                 }
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                     return responseString != null ? JsonConvert.DeserializeObject<T>(responseString) : default(T);
 
                 var error = responseString != null ? JsonConvert.DeserializeObject<ServiceError>(responseString) : new ServiceError() {Code = "unknown"};

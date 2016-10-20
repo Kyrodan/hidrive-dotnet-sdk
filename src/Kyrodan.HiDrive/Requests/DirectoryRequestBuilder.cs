@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kyrodan.HiDrive.Models;
+using Kyrodan.HiDrive.Serialization;
 
 namespace Kyrodan.HiDrive.Requests
 {
@@ -12,11 +13,11 @@ namespace Kyrodan.HiDrive.Requests
         {
         }
 
-        public IGetRequest<DirectoryItem> Get(string path = null, string pid = null, IEnumerable<DirectoryMember> members = null, IEnumerable<string> fields = null, int? offset = null, int? limit = null,
+        public IRequest<DirectoryItem> Get(string path = null, string pid = null, IEnumerable<DirectoryMember> members = null, IEnumerable<string> fields = null, int? offset = null, int? limit = null,
             string snapshot = null)
         {
 
-            var request = new GetRequest<DirectoryItem>(this.RequestUrl, this.Client);
+            var request = new Request<DirectoryItem>(this.RequestUrl, this.Client);
 
             if (path != null) request.QueryOptions.Add(new KeyValuePair<string, string>("path", Uri.EscapeDataString(path)));
             if (pid != null) request.QueryOptions.Add(new KeyValuePair<string, string>("pid", pid));
@@ -29,6 +30,33 @@ namespace Kyrodan.HiDrive.Requests
                     : new KeyValuePair<string, string>("limit", limit.Value.ToString()));
             }
             if (snapshot != null) request.QueryOptions.Add(new KeyValuePair<string, string>("snapshot", snapshot));
+
+            return request;
+        }
+
+        public IRequest<DirectoryItem> Create(string path = null, string pid = null)
+        {
+            var request = new Request<DirectoryItem>(this.RequestUrl, this.Client)
+            {
+                Method = "POST"
+            };
+
+            if (path != null) request.QueryOptions.Add(new KeyValuePair<string, string>("path", Uri.EscapeDataString(path)));
+            if (pid != null) request.QueryOptions.Add(new KeyValuePair<string, string>("pid", pid));
+
+            return request;
+        }
+
+        public IRequest Delete(string path = null, string pid = null, bool? isRecursive = null)
+        {
+            var request = new Request(this.RequestUrl, this.Client)
+            {
+                Method = "DELETE"
+            };
+
+            if (path != null) request.QueryOptions.Add(new KeyValuePair<string, string>("path", Uri.EscapeDataString(path)));
+            if (pid != null) request.QueryOptions.Add(new KeyValuePair<string, string>("pid", pid));
+            if (isRecursive.HasValue) request.QueryOptions.Add(new KeyValuePair<string, string>("recursive", isRecursive.Value.ToJsonBool()));
 
             return request;
         }
