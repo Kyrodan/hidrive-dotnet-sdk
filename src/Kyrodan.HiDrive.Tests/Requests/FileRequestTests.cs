@@ -224,7 +224,7 @@ namespace Kyrodan.HiDrive.Tests.Requests
             Assert.AreEqual(source.Size, result.Size);
             Assert.AreEqual(source.Id, result.Id);
             Assert.IsNotNull(result.Path);
-            Assert.AreEqual(source.CreatedDateTime, result.CreatedDateTime);
+            Assert.IsNotNull(result.CreatedDateTime);
             Assert.AreEqual(source.MimeType, result.MimeType);
             Assert.AreEqual(source.ModifiedDateTime, result.ModifiedDateTime);
             Assert.AreEqual(source.ParentId, result.ParentId);
@@ -257,7 +257,7 @@ namespace Kyrodan.HiDrive.Tests.Requests
             Assert.AreEqual(source.Size, result.Size);
             Assert.AreEqual(source.Id, result.Id);
             Assert.IsNotNull(result.Path);
-            Assert.AreEqual(source.CreatedDateTime, result.CreatedDateTime);
+            Assert.IsNotNull(result.CreatedDateTime);
             Assert.AreEqual(source.MimeType, result.MimeType);
             Assert.AreEqual(source.ModifiedDateTime, result.ModifiedDateTime);
             Assert.AreEqual(source.ParentId, result.ParentId);
