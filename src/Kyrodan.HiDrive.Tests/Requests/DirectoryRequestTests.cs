@@ -268,7 +268,7 @@ namespace Kyrodan.HiDrive.Tests.Requests
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Path);
             Assert.IsNotNull(result.CHash);
-            Assert.AreEqual(source.CreatedDateTime, result.CreatedDateTime);
+            Assert.IsNotNull(result.CreatedDateTime);
             Assert.AreEqual(source.HasDirectories, result.HasDirectories);
             Assert.AreEqual(source.Id, result.Id);
             Assert.AreEqual(source.IsReadable, result.IsReadable);
@@ -301,7 +301,7 @@ namespace Kyrodan.HiDrive.Tests.Requests
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Path);
             Assert.IsNotNull(result.CHash);
-            Assert.AreEqual(source.CreatedDateTime, result.CreatedDateTime);
+            Assert.IsNotNull(result.CreatedDateTime);
             Assert.AreEqual(source.HasDirectories, result.HasDirectories);
             Assert.AreEqual(source.Id, result.Id);
             Assert.AreEqual(source.IsReadable, result.IsReadable);
