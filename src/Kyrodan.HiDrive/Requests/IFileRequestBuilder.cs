@@ -7,12 +7,11 @@ namespace Kyrodan.HiDrive.Requests
         //IFileRequest Request();
         //IFileRequest Request(IEnumerable<KeyValuePair<string, string>> additionalParameters);
 
-
         IReceiveStreamRequest Download(string path = null, string pid = null, string snapshot = null);
         //string UploadNew(string dir = null, string dir_id = null, string name = null);
-        ISendStreamRequest<FileItem> Upload(string name, string dir = null, string dir_id = null);
+        ISendStreamRequest<FileItem> Upload(string name, string dir = null, string dir_id = null, UploadMode mode = UploadMode.CreateOnly);
         //string UploadPart(string path = null, string pid = null, long offset = 0);
 
-        //string Delete(string path = null, string pid = null);
+        IRequest Delete(string path = null, string pid = null);
     }
 }

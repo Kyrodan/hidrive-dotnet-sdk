@@ -22,16 +22,38 @@ namespace Kyrodan.HiDrive.Requests
             return request;
         }
 
-        public ISendStreamRequest<FileItem> Upload(string name, string dir = null, string dir_id = null)
+        public ISendStreamRequest<FileItem> Upload(string name, string dir = null, string dir_id = null, UploadMode mode = UploadMode.CreateOnly)
         {
-            var request = new SendStreamRequest<FileItem>(this.RequestUrl, this.Client)
+            var request = new SendStreamRequest<FileItem>(this.RequestUrl, this.Client);
+
+            switch (mode)
             {
-                Method = "PUT"
-            };
+                case UploadMode.CreateOnly:
+                    request.Method = "POST";
+                    break;
+                case UploadMode.CreateOrUpdate:
+                    request.Method = "PUT";
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
 
             request.QueryOptions.Add(new KeyValuePair<string, string>("name", Uri.EscapeDataString(name)));
             if (dir != null) request.QueryOptions.Add(new KeyValuePair<string, string>("dir", Uri.EscapeDataString(dir)));
             if (dir_id != null) request.QueryOptions.Add(new KeyValuePair<string, string>("dir_id", dir_id));
+
+            return request;
+        }
+
+        public IRequest Delete(string path = null, string pid = null)
+        {
+            var request = new Request(this.RequestUrl, this.Client)
+            {
+                Method = "DELETE"
+            };
+
+            if (path != null) request.QueryOptions.Add(new KeyValuePair<string, string>("path", Uri.EscapeDataString(path)));
+            if (pid != null) request.QueryOptions.Add(new KeyValuePair<string, string>("pid", pid));
 
             return request;
         }

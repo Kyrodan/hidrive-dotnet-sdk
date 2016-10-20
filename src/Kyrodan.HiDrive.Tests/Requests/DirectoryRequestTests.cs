@@ -38,9 +38,9 @@ namespace Kyrodan.HiDrive.Tests.Requests
         public async Task Get()
         {
             // Arrange
-            var sut = Client.Directory.Get(null, HomeId);
 
             // Act
+            var sut = Client.Directory.Get(null, HomeId);
             var result = await sut.ExecuteAsync();
 
             // Assert
@@ -74,9 +74,8 @@ namespace Kyrodan.HiDrive.Tests.Requests
                 DirectoryBaseItem.Fields.Type
             };
 
-            var sut = Client.Directory.Get(null, HomeId, null, fields);
-
             // Act
+            var sut = Client.Directory.Get(null, HomeId, null, fields);
             var result = await sut.ExecuteAsync();
 
             // Assert
@@ -102,9 +101,18 @@ namespace Kyrodan.HiDrive.Tests.Requests
         }
 
         [TestMethod]
-        [Ignore]
         public async Task GetHome()
         {
+            // Arrange
+
+            // Act
+            var sut = Client.Directory.GetHome();
+            var result = await sut.ExecuteAsync();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Members);
+            Assert.IsNotNull(result.Path);
         }
 
         [TestMethod]
@@ -114,9 +122,8 @@ namespace Kyrodan.HiDrive.Tests.Requests
             var filename = "create_test-" + Random.Next();
             var path = TestFolder + "/" + filename;
 
-            var sut = Client.Directory.Create(path, HomeId);
-
             // Act
+            var sut = Client.Directory.Create(path, HomeId);
             var result = await sut.ExecuteAsync();
             
             // Assert
@@ -137,7 +144,6 @@ namespace Kyrodan.HiDrive.Tests.Requests
             Assert.IsNotNull(result.ParentId);
             Assert.IsNotNull(result.Size);
             Assert.IsNotNull(result.Type);
-
         }
 
         [TestMethod]
@@ -148,9 +154,8 @@ namespace Kyrodan.HiDrive.Tests.Requests
             var path = TestFolder + "/" + filename;
             var createdItem = await Client.Directory.Create(path, HomeId).ExecuteAsync();
 
-            var sut = Client.Directory.Delete(path, HomeId);
-
             // Act
+            var sut = Client.Directory.Delete(path, HomeId);
             await sut.ExecuteAsync();
 
             // Assert
@@ -170,9 +175,9 @@ namespace Kyrodan.HiDrive.Tests.Requests
                 var fileItem = await Client.File.Upload("test.bin", path, HomeId).ExecuteAsync(stream);
             }
 
+            // Act
             var sut = Client.Directory.Delete(path, HomeId, false);
 
-            // Act
             try
             {
                 await sut.ExecuteAsync();
@@ -203,9 +208,8 @@ namespace Kyrodan.HiDrive.Tests.Requests
                 var fileItem = await Client.File.Upload("test.bin", path, HomeId).ExecuteAsync(stream);
             }
 
-            var sut = Client.Directory.Delete(path, HomeId, true);
-
             // Act
+            var sut = Client.Directory.Delete(path, HomeId, true);
             await sut.ExecuteAsync();
 
             // Assert
@@ -213,21 +217,104 @@ namespace Kyrodan.HiDrive.Tests.Requests
         }
 
         [TestMethod]
-        [Ignore]
         public async Task Copy()
         {
+            // Arrange
+            var sourcePath = TestFolder + "/copy_test-source-" + Random.Next();
+            var source = await Client.Directory.Create(sourcePath, HomeId).ExecuteAsync();
+
+            var destFolder = "copy_test-dest-" + Random.Next();
+            var destPath = TestFolder + "/" + destFolder;
+
+            // Act
+            var sut = Client.Directory.Copy(sourcePath, HomeId, destPath, HomeId);
+            var result = await sut.ExecuteAsync();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Path);
+            Assert.IsNotNull(result.CHash);
+            Assert.IsNotNull(result.CreatedDateTime);
+            Assert.IsNotNull(result.HasDirectories);
+            Assert.IsNotNull(result.Id);
+            Assert.IsNotNull(result.IsReadable);
+            Assert.IsNotNull(result.IsWritable);
+            Assert.IsNotNull(result.MetaHash);
+            Assert.IsNotNull(result.MetaOnlyHash);
+            Assert.IsNotNull(result.ModifiedDateTime);
+            Assert.AreEqual(destFolder, result.Name);
+            Assert.IsNotNull(result.NameHash);
+            Assert.IsNotNull(result.NumberOfMembers);
+            Assert.IsNotNull(result.ParentId);
+            Assert.IsNotNull(result.Size);
+            Assert.IsNotNull(result.Type);
         }
 
         [TestMethod]
-        [Ignore]
         public async Task Move()
         {
+            // Arrange
+            var sourcePath = TestFolder + "/move_test-source-" + Random.Next();
+            var source = await Client.Directory.Create(sourcePath, HomeId).ExecuteAsync();
+
+            var destFolder = "move_test-dest-" + Random.Next();
+            var destPath = TestFolder + "/" + destFolder;
+
+            // Act
+            var sut = Client.Directory.Move(sourcePath, HomeId, destPath, HomeId);
+            var result = await sut.ExecuteAsync();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Path);
+            Assert.IsNotNull(result.CHash);
+            Assert.AreEqual(source.CreatedDateTime, result.CreatedDateTime);
+            Assert.AreEqual(source.HasDirectories, result.HasDirectories);
+            Assert.AreEqual(source.Id, result.Id);
+            Assert.AreEqual(source.IsReadable, result.IsReadable);
+            Assert.AreEqual(source.IsWritable, result.IsWritable);
+            Assert.IsNotNull(result.MetaHash);
+            Assert.IsNotNull(result.MetaOnlyHash);
+            Assert.AreEqual(source.ModifiedDateTime, result.ModifiedDateTime);
+            Assert.AreEqual(destFolder, result.Name);
+            Assert.IsNotNull(result.NameHash);
+            Assert.AreEqual(source.NumberOfMembers, result.NumberOfMembers);
+            Assert.IsNotNull(result.ParentId);
+            Assert.AreEqual(source.Size, result.Size);
+            Assert.AreEqual(source.Type, result.Type);
         }
 
         [TestMethod]
-        [Ignore]
         public async Task Rename()
         {
+            // Arrange
+            var sourcePath = TestFolder + "/move_test-source-" + Random.Next();
+            var source = await Client.Directory.Create(sourcePath, HomeId).ExecuteAsync();
+
+            var destName = "move_test-dest-" + Random.Next();
+
+            // Act
+            var sut = Client.Directory.Rename(sourcePath, HomeId, destName);
+            var result = await sut.ExecuteAsync();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Path);
+            Assert.IsNotNull(result.CHash);
+            Assert.AreEqual(source.CreatedDateTime, result.CreatedDateTime);
+            Assert.AreEqual(source.HasDirectories, result.HasDirectories);
+            Assert.AreEqual(source.Id, result.Id);
+            Assert.AreEqual(source.IsReadable, result.IsReadable);
+            Assert.AreEqual(source.IsWritable, result.IsWritable);
+            Assert.IsNotNull(result.MetaHash);
+            Assert.IsNotNull(result.MetaOnlyHash);
+            Assert.AreEqual(source.ModifiedDateTime, result.ModifiedDateTime);
+            Assert.AreEqual(destName, result.Name);
+            Assert.IsNotNull(result.NameHash);
+            Assert.AreEqual(source.NumberOfMembers, result.NumberOfMembers);
+            Assert.AreEqual(source.ParentId, result.ParentId);
+            Assert.AreEqual(source.Size, result.Size);
+            Assert.AreEqual(source.Type, result.Type);
         }
 
     }

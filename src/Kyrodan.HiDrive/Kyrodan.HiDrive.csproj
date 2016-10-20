@@ -70,6 +70,7 @@
     <Compile Include="Requests\SendStreamRequest.cs" />
     <Compile Include="Requests\ServiceError.cs" />
     <Compile Include="Requests\ServiceException.cs" />
+    <Compile Include="Requests\UploadMode.cs" />
     <Compile Include="Requests\UserMeRequestBuilder.cs" />
     <Compile Include="Requests\UserRequestBuilder.cs" />
     <Compile Include="Serialization\EscapedStringConverter.cs" />

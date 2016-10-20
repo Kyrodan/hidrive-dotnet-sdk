@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Kyrodan.HiDrive.Requests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Kyrodan.HiDrive.Tests.Requests
@@ -57,8 +58,7 @@ namespace Kyrodan.HiDrive.Tests.Requests
         }
 
         [TestMethod]
-        [Ignore]
-        public async Task Upload()
+        public async Task UploadCreateNew()
         {   
             // Arrange
             var content = CreateRandomBytes();
@@ -76,15 +76,83 @@ namespace Kyrodan.HiDrive.Tests.Requests
         }
 
         [TestMethod]
+        public async Task UploadOverwriteExisting()
+        {
+            // Arrange
+            var initialContent = CreateRandomBytes();
+            var initialStream = new MemoryStream(initialContent);
+
+            var filename = "upload_test-" + Random.Next() + ".bin";
+            var existingFile = await Client.File.Upload(filename, TestFolder, HomeId).ExecuteAsync(initialStream);
+
+            var content = CreateRandomBytes();
+            var stream = new MemoryStream(content);
+            var sut = Client.File.Upload(filename, TestFolder, HomeId, UploadMode.CreateOrUpdate);
+
+            // Act
+            var result = await sut.ExecuteAsync(stream);
+
+            // Assert
+            Assert.AreEqual(filename, result.Name);
+            Assert.AreEqual(content.LongLength, result.Size);
+            Assert.AreEqual(existingFile.Id, result.Id);
+        }
+
+        [TestMethod]
+        public async Task UploadFailOnExisting()
+        {
+            // Arrange
+            var initialContent = CreateRandomBytes();
+            var initialStream = new MemoryStream(initialContent);
+
+            var filename = "upload_test-" + Random.Next() + ".bin";
+            var existingFile = await Client.File.Upload(filename, TestFolder, HomeId).ExecuteAsync(initialStream);
+
+            var content = CreateRandomBytes();
+            var stream = new MemoryStream(content);
+            var sut = Client.File.Upload(filename, TestFolder, HomeId);
+
+            // Act
+            try
+            {
+                var result = await sut.ExecuteAsync(stream);
+            }
+
+            // Assert
+            catch (ServiceException ex)
+            {
+                Assert.IsNotNull(ex.Error);
+                Assert.AreEqual("409", ex.Error.Code);
+                return;
+            }
+
+            Assert.Fail("Expected Exception was not thrown.");
+        }
+
+        [TestMethod]
         [Ignore]
         public async Task Copy()
         {
         }
 
         [TestMethod]
-        [Ignore]
         public async Task Delete()
         {
+            // Arrange
+            var filename = "delete_test-" + Random.Next() + ".bin";
+
+            var content = CreateRandomBytes();
+
+            var stream = new MemoryStream(content);
+            var file = await Client.File.Upload(filename, TestFolder, HomeId).ExecuteAsync(stream);
+
+            var sut = Client.File.Delete(TestFolder + "/" + filename, HomeId);
+
+            // Act
+            await sut.ExecuteAsync();
+
+            // Assert
+            // Just pass if no exception thrown
         }
 
         [TestMethod]
