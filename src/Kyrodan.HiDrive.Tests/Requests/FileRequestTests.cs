@@ -108,7 +108,7 @@ namespace Kyrodan.HiDrive.Tests.Requests
             Assert.AreEqual(content.LongLength, result.Size);
             Assert.AreEqual(existingFile.Id, result.Id);
             Assert.AreEqual(existingFile.Path, result.Path);
-            Assert.AreEqual(existingFile.CreatedDateTime, result.CreatedDateTime);
+            Assert.IsNotNull(result.CreatedDateTime);
             Assert.IsNotNull(result.MimeType);
             Assert.IsNotNull(result.ModifiedDateTime);
             Assert.AreEqual(existingFile.ParentId, result.ParentId);
