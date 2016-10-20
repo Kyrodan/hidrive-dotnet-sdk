@@ -1,10 +1,11 @@
-## 0.2.0 (unreleased)
+## 0.2.0 (2016-10-16)
 
 ### New
 
 * Implemented Unit Tests
+* Completed all Direcory-Operations
+* Completed basic File-Operations
 
-### Fixed
 
 
 ## 0.1.0 (2016-08-31)
