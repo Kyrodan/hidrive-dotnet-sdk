@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Kyrodan.HiDrive.Authentication;
 
-namespace Kyrodan.HiDrive.TestClient
+namespace Kyrodan.HiDrive.TestPreparation
 {
     class Program
     {
@@ -41,41 +37,21 @@ namespace Kyrodan.HiDrive.TestClient
 
         private static void WriteClientConfiguration(string clientId, string clientSecret, string refreshToken)
         {
-            var fileName = @"Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl";
+            var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                @"microsoft\UserSecrets\kyrodan-hidrive-tests-f1cf20be-1d25-4501-a9f1-9dd9be27b7e7");
 
-            var inFiles = new[]
+            Directory.CreateDirectory(directoryPath);
+            var filePath = Path.Combine(directoryPath, "secrets.json");
+            File.Delete(filePath);
+
+            using (var file = File.CreateText(filePath))
             {
-                @"..\..\..\" + fileName,
-                fileName,
-                @"src\" + fileName,
-            };
-
-            string templateFile = null;
-
-            foreach (var inFile in inFiles)
-            {
-                var f = Path.Combine(Environment.CurrentDirectory, inFile);
-                if (File.Exists(f))
-                {
-                    templateFile = inFile;
-                    break;
-                }
+                file.WriteLine("{");
+                file.WriteLine($"  \"ClientSecret\": \"{clientId}\",");
+                file.WriteLine($"  \"ClientId\": \"{clientSecret}\",");
+                file.WriteLine($"  \"RefreshToken\": \"{refreshToken}\",");
+                file.WriteLine("}");
             }
-
-            if (templateFile == null)
-            {
-                Console.WriteLine("Faile to find template ClientConfiguration.cs.tmpl.");
-                return;
-            }
-
-            var content = File.ReadAllText(templateFile);
-
-            content = content.Replace("{{ClientId}}", clientId);
-            content = content.Replace("{{ClientSecret}}", clientSecret);
-            content = content.Replace("{{RefreshToken}}", refreshToken);
-
-            var outFile = Path.ChangeExtension(templateFile, null);
-            File.WriteAllText(outFile, content);
             Console.WriteLine("Successfully written ClientConfiguration.cs");
         }
     }

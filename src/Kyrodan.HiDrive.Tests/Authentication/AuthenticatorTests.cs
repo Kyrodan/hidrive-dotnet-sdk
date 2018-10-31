@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Kyrodan.HiDrive.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Kyrodan.HiDrive.Tests.Authentication
@@ -8,6 +9,16 @@ namespace Kyrodan.HiDrive.Tests.Authentication
     [TestClass]
     public class AuthenticatorTests
     {
+        public static IConfiguration Configuration { get; set; }
+
+        static AuthenticatorTests()
+        {
+            var builder = new ConfigurationBuilder()
+                .AddUserSecrets<AuthenticatorTests>();
+
+            Configuration = builder.Build();
+        }
+
         [TestMethod]
         public void GetAuthorizationCodeRequestUrl()
         {
@@ -17,7 +28,7 @@ namespace Kyrodan.HiDrive.Tests.Authentication
                 sut.GetAuthorizationCodeRequestUrl(new AuthorizationScope(AuthorizationRole.User,
                     AuthorizationPermission.ReadWrite));
 
-            var expected = $"https://www.hidrive.strato.com/oauth2/authorize?client_id={ClientConfiguration.ClientId}&response_type=code&scope=user,rw";
+            var expected = $"https://www.hidrive.strato.com/oauth2/authorize?client_id={Configuration["ClientId"]}&response_type=code&scope=user,rw";
             Assert.AreEqual(expected, result);
         }
 
@@ -30,7 +41,7 @@ namespace Kyrodan.HiDrive.Tests.Authentication
                 sut.GetAuthorizationCodeRequestUrl(new AuthorizationScope(AuthorizationRole.User,
                     AuthorizationPermission.ReadWrite), "http://localhost");
 
-            var expected = $"https://www.hidrive.strato.com/oauth2/authorize?client_id={ClientConfiguration.ClientId}&response_type=code&scope=user,rw&redirect_uri=http%3A%2F%2Flocalhost";
+            var expected = $"https://www.hidrive.strato.com/oauth2/authorize?client_id={Configuration["ClientId"]}&response_type=code&scope=user,rw&redirect_uri=http%3A%2F%2Flocalhost";
             Assert.AreEqual(expected, result);
         }
 
@@ -49,11 +60,11 @@ namespace Kyrodan.HiDrive.Tests.Authentication
         {
             var sut = GetValidAuthenticator();
 
-            var result = await sut.AuthenticateByRefreshTokenAsync(ClientConfiguration.RefreshToken);
+            var result = await sut.AuthenticateByRefreshTokenAsync(Configuration["RefreshToken"]);
 
             Assert.IsNotNull(result);
             Assert.AreEqual("Bearer", result.TokenType);
-            Assert.AreEqual(ClientConfiguration.RefreshToken, result.RefreshToken);
+            Assert.AreEqual(Configuration["RefreshToken"], result.RefreshToken);
             Assert.IsNotNull(result.AccessToken);
             Assert.IsNotNull(result.ExpiresIn);
         }
@@ -81,11 +92,11 @@ namespace Kyrodan.HiDrive.Tests.Authentication
         [TestMethod]
         public async Task AuthenticateByRefreshTokenWithInvalidClientId()
         {
-            var sut = new HiDriveAuthenticator("invalid_id", ClientConfiguration.ClientSecret);
+            var sut = new HiDriveAuthenticator("invalid_id", Configuration["ClientSecret"]);
 
             try
             {
-                var result = await sut.AuthenticateByRefreshTokenAsync(ClientConfiguration.RefreshToken);
+                var result = await sut.AuthenticateByRefreshTokenAsync(Configuration["RefreshToken"]);
                 Assert.Fail("AuthenticationException expected");
             }
             catch (AuthenticationException ex)
@@ -101,11 +112,11 @@ namespace Kyrodan.HiDrive.Tests.Authentication
         [TestMethod]
         public async Task AuthenticateByRefreshTokenWithInvalidClientSecret()
         {
-            var sut = new HiDriveAuthenticator(ClientConfiguration.ClientId, "invalid_secret");
+            var sut = new HiDriveAuthenticator(Configuration["ClientId"], "invalid_secret");
 
             try
             {
-                var result = await sut.AuthenticateByRefreshTokenAsync(ClientConfiguration.RefreshToken);
+                var result = await sut.AuthenticateByRefreshTokenAsync(Configuration["RefreshToken"]);
                 Assert.Fail("AuthenticationException expected");
             }
             catch (AuthenticationException ex)
@@ -144,7 +155,7 @@ namespace Kyrodan.HiDrive.Tests.Authentication
         public async Task AuthenticateRequestWithBeingAuthenticated()
         {
             var sut = GetValidAuthenticator();
-            var token = await sut.AuthenticateByRefreshTokenAsync(ClientConfiguration.RefreshToken);
+            var token = await sut.AuthenticateByRefreshTokenAsync(Configuration["RefreshToken"]);
 
             var message = new HttpRequestMessage();
             await sut.AuthenticateRequestAsync(message);
@@ -156,7 +167,7 @@ namespace Kyrodan.HiDrive.Tests.Authentication
 
         protected IHiDriveAuthenticator GetValidAuthenticator()
         {
-            return new HiDriveAuthenticator(ClientConfiguration.ClientId, ClientConfiguration.ClientSecret);
+            return new HiDriveAuthenticator(Configuration["ClientId"], Configuration["ClientSecret"]);
         }
     }
 }
