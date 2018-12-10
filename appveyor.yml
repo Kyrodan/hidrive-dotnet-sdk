@@ -23,15 +23,14 @@ before_build:
 - cmd: dotnet user-secrets set "ClientId" "$env:HIDRIVE_CLIENTID" --project "src\Kyrodan.HiDrive.Tests"
 - cmd: dotnet user-secrets set "ClientSecret" "$env:HIDRIVE_CLIENTSECRET" --project "src\Kyrodan.HiDrive.Tests"
 - cmd: dotnet user-secrets set "RefreshToken" "$env:HIDRIVE_REFRESHTOKEN" --project "src\Kyrodan.HiDrive.Tests"
-build_script:
-- cmd: build.cmd
+build:
+  publish_nuget: true
+  verbosity: minimal
 after_build:
 - cmd: tools\7za.exe a -tzip Kyrodan.HiDriveSDK.%SEMVER%%BUILD_QUALITY%.zip .\src\Kyrodan.HiDrive\bin\%configuration%\*.*
 artifacts:
 - path: Kyrodan.HiDriveSDK.*.zip
   name: ZIP-Distribution
-- path: build\dist\*.nupkg
-  name: NuGet Package
 deploy:
 - provider: NuGet
   api_key:
@@ -43,7 +42,7 @@ deploy:
 - provider: GitHub
   auth_token:
     secure: zqGFJdh0d0e+S2Eyudc4gCjQqImkQutu/TsN9knDXJCXMaVl8izm9vnMK9ayX7VP
-  artifact: Kyrodan.HiDriveSDK.*.zip
+  artifact: /.*\.nupkg/
   draft: true
   prerelease: false
   on:
