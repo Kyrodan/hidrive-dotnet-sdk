@@ -1,13 +1,8 @@
 version: 0.3.0.{build}
+image: Visual Studio 2017
 configuration: Release
 init:
 - cmd: if "%APPVEYOR_REPO_TAG%" NEQ "true" set BUILD_QUALITY=-unstable
-assembly_info:
-  patch: true
-  file: 'src\SharedAssemblyInfo.cs'
-  assembly_version: $(SEMVER)
-  assembly_file_version: $(SEMVER).{build}
-  assembly_informational_version: $(SEMVER)$(BUILD_QUALITY)
 environment:
   SEMVER: 0.3.0
   HIDRIVE_CLIENTID:
@@ -16,18 +11,19 @@ environment:
     secure: 3udqP0meKf9lw+EhwB/mvVfG2tXBvsS3SwWpQfs7RsPNs4FZy3iHLwwH7v5L25IH
   HIDRIVE_REFRESHTOKEN:
     secure: 2aAKUSlZnV6PubvLx1HU1PMPS4YMcaYeHDwszCDCBEw=
-install:
-- cmd: tools\nuget.exe restore
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '$(SEMVER)'
+  package_version: '$(SEMVER).{build}'
+  assembly_version: '$(SEMVER)'
+  file_version: '$(SEMVER).{build}'
+  informational_version: '$(SEMVER)$(BUILD_QUALITY)'
 before_build:
-- ps: |
-      #copy src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs
-      $original_file = 'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs.tmpl'
-      $destination_file =  'src\Kyrodan.HiDrive.Tests\ClientConfiguration.cs'
-      (Get-Content $original_file) | Foreach-Object {
-        $_ -replace '{{ClientId}}', $env:HIDRIVE_CLIENTID `
-           -replace '{{ClientSecret}}', $env:HIDRIVE_CLIENTSECRET `
-           -replace '{{RefreshToken}}', $env:HIDRIVE_REFRESHTOKEN 
-      } | Set-Content $destination_file
+- cmd: dotnet user-secrets set "ClientId" "%HIDRIVE_CLIENTID%" --project "src\Kyrodan.HiDrive.Tests"
+- cmd: dotnet user-secrets set "ClientSecret" "%HIDRIVE_CLIENTSECRET%" --project "src\Kyrodan.HiDrive.Tests"
+- cmd: dotnet user-secrets set "RefreshToken" "%HIDRIVE_REFRESHTOKEN%" --project "src\Kyrodan.HiDrive.Tests"
+- cmd: dotnet restore
 build:
   publish_nuget: true
   verbosity: minimal
@@ -41,12 +37,13 @@ deploy:
   api_key:
     secure: sGR4t0DGDW9V8uCS3wkQS/is2NnGc+pizHdfDBocXxuoDUIPQIxt6O4FanfPqTuG
   skip_symbols: false
+  artifact: Kyrodan.HiDrive.*.nupkg
   on:
     appveyor_repo_tag: true
 - provider: GitHub
   auth_token:
     secure: zqGFJdh0d0e+S2Eyudc4gCjQqImkQutu/TsN9knDXJCXMaVl8izm9vnMK9ayX7VP
-  artifact: Kyrodan.HiDriveSDK.*.zip
+  artifact: /.*\.nupkg/
   draft: true
   prerelease: false
   on:

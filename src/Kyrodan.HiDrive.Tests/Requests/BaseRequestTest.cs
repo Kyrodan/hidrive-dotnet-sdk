@@ -1,5 +1,6 @@
 ﻿using System;
 using Kyrodan.HiDrive.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Kyrodan.HiDrive.Tests.Requests
@@ -10,6 +11,7 @@ namespace Kyrodan.HiDrive.Tests.Requests
         public const string TestFolderBase = "hidrive-dotnet-sdk-tests";
 
         public static IHiDriveAuthenticator Authenticator { get; }
+        public static IConfiguration Configuration { get; set; }
 
         private static Random _random;
 
@@ -26,8 +28,13 @@ namespace Kyrodan.HiDrive.Tests.Requests
 
         static BaseRequestTest()
         {
-            Authenticator = new HiDriveAuthenticator(ClientConfiguration.ClientId, ClientConfiguration.ClientSecret);
-            Authenticator.AuthenticateByRefreshTokenAsync(ClientConfiguration.RefreshToken).Wait();
+            var builder = new ConfigurationBuilder()
+                .AddUserSecrets<BaseRequestTest>();
+
+            Configuration = builder.Build();
+            
+            Authenticator = new HiDriveAuthenticator(Configuration["ClientId"], Configuration["ClientSecret"]);
+            Authenticator.AuthenticateByRefreshTokenAsync(Configuration["RefreshToken"]).Wait();
         }
 
         protected static HiDriveClient CreateClient()
