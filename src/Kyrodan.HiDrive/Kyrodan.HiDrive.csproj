@@ -2,9 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.1</TargetFrameworks>
+    <!-- version numbers will be updated by build -->
+    <AssemblyVersion>0.0.3.0</AssemblyVersion>
+    <FileVersion>0.0.3</FileVersion>
+    <ProductVersion>0.0.3.0</ProductVersion>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Kyrodan/hidrive-dotnet-sdk/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Kyrodan/hidrive-dotnet-sdk</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/Kyrodan/hidrive-dotnet-sdk/master/doc/HiDrive_64x64.png</PackageIconUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Integrates HiDrive into your C# app</Description>
     <PackageTags>HiDrive</PackageTags>
     <Copyright>Copyright 2016 by Daniel Bölts</Copyright>

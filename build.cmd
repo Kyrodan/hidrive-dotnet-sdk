@@ -22,7 +22,8 @@ if %errorlevel% NEQ 0 goto error
 :package
 dotnet pack src\Kyrodan.HiDrive\Kyrodan.HiDrive.csproj --no-build -c Release -o ..\..\build\dist
 
-xcopy src\Kyrodan.HiDrive\bin\Release\netstandard2.0\*.* build\bin
+xcopy src\Kyrodan.HiDrive\bin\Release\netstandard1.1\*.* build\bin\netstandard1.1\
+xcopy src\Kyrodan.HiDrive\bin\Release\netstandard2.0\*.* build\bin\netstandard2.0\
 rem del build\bin\*.pdb build\bin\*.xml 
 %zip% a -tzip build\dist\Kyrodan.HiDriveSDK.zip .\build\bin\*
 
