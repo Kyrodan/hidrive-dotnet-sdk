@@ -23,6 +23,7 @@ before_build:
 - cmd: dotnet user-secrets set "ClientId" "$env:HIDRIVE_CLIENTID" --project "src\Kyrodan.HiDrive.Tests"
 - cmd: dotnet user-secrets set "ClientSecret" "$env:HIDRIVE_CLIENTSECRET" --project "src\Kyrodan.HiDrive.Tests"
 - cmd: dotnet user-secrets set "RefreshToken" "$env:HIDRIVE_REFRESHTOKEN" --project "src\Kyrodan.HiDrive.Tests"
+- cmd: dotnet restore
 build:
   publish_nuget: true
   verbosity: minimal
