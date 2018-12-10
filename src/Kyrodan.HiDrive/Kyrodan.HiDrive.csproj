@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard1.1</TargetFrameworks>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Kyrodan/hidrive-dotnet-sdk/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Kyrodan/hidrive-dotnet-sdk</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/Kyrodan/hidrive-dotnet-sdk/master/doc/HiDrive_64x64.png</PackageIconUrl>
@@ -11,8 +11,12 @@
     <RepositoryUrl>https://github.com/Kyrodan/hidrive-dotnet-sdk</RepositoryUrl>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
 </Project>
